@@ -1,0 +1,75 @@
+/* สไตล์เว็บเพื่อความสวยงาม สีน้ำเงิน */
+body {
+    /* คำอธิบาย CSS เดิมในส่วนนี้ */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1 {
+    /* คำอธิบาย CSS เดิมในส่วนนี้ */
+    text-align: center;
+    margin: 0;
+}
+
+
+/* สไตล์ของฟอร์ม */
+form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* อัพเดทการจัดแสดงปุ่มให้อยู่ตรงกลาง */
+form button,
+form input[type="submit"] {
+    display: block;
+    margin: 10px auto;
+    /* ปรับแต่งสีพื้นหลังและขอบของปุ่ม */
+    background-color: #6d88ba;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* เมื่อเลื่อนเมาส์ไปที่ปุ่ม */
+form button:hover,
+form input[type="submit"]:hover {
+    background-color: #405d82;
+}
+
+/* ขนาดตัวอักษรของข้อความในปุ่ม */
+form button span,
+form input[type="submit"] span {
+    font-size: 18px;
+}
+
+/* สไตล์เพิ่มเติมให้เหมาะสำหรับหน้าจอเล็ก */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    /* ปรับขนาดและระยะห่างของปุ่มให้เหมาะสำหรับหน้าจอเล็ก */
+    form button,
+    form input[type="submit"] {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    /* ปรับขนาดตัวอักษรของรายการในลิสต์ให้เหมาะสำหรับหน้าจอเล็ก */
+    .predictions li {
+        font-size: 14px;
+    }
+}
+
+/* สไตล์ของรูปภาพ */
+.app-image {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+}

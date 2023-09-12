@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ระบบช่วยวิเคราะห์ชนิดพันธุ์ข้าวปลูก</title>
+    <style>
+        /* สไตล์เว็บเพื่อความสวยงาม สีน้ำเงิน */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+            justify-content: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+            min-height: 100vh; /* ความสูงขั้นต่ำของหน้าเว็บ */
+        }
+
+        h1 {
+            text-align: center;
+            color: #5f390a;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .capture-button {
+            background-color: #e0c391;
+            color: white;
+            padding: 14px 20px;
+            margin: 10px auto;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100px; /* ปรับความกว้างของปุ่ม */
+            height: 40px; /* ปรับความสูงของปุ่ม */
+        }
+
+        .capture-button:hover {
+            background-color: #e0c391;
+        }
+
+    
+        .predict-button {
+            background-color: #5f390a;
+            color: white;
+            padding: 14px 20px;
+            margin: 10px auto;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100px; /* ปรับความกว้างของปุ่ม */
+            height: 40px; /* ปรับความสูงของปุ่ม */
+        }
+
+        .predict-button:hover {
+            background-color:  #5f390a;
+        }
+
+        .image-preview {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+        }
+
+        .predictions {
+            list-style: none;
+            padding: 0;
+        }
+
+        .predictions li {
+            margin-bottom: 10px;
+        }
+
+        /* สไตล์ที่ต้องการเมื่อหน้าจอขนาดเล็ก (โทรศัพท์) */
+        @media (max-width: 480px) {
+            /* ปรับขนาดตัวอักษรให้เล็กลงเมื่ออยู่ในหน้าจอขนาดเล็ก */
+            h1 {
+                font-size: 24px;
+            }
+            /* ปรับขนาดปุ่มให้เล็กลงเมื่ออยู่ในหน้าจอขนาดเล็ก */
+            .capture-button,
+            .predict-button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+
+        /* สไตล์ที่ต้องการเมื่อหน้าจอขนาดกลาง (แท็บเล็ต) */
+        @media (min-width: 481px) and (max-width: 1024px) {
+            /* เพิ่มสไตล์หรือปรับแต่งเนื้อหาให้เหมาะสำหรับแท็บเล็ต */
+            /* ตัวอย่าง:
+            h1 {
+                font-size: 30px;
+            }
+            .capture-button,
+            .predict-button {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+            */
+        }
+
+        /* สไตล์ที่ต้องการเมื่อหน้าจอขนาดใหญ่ (คอมพิวเตอร์) */
+        @media (min-width: 1025px) {
+            /* เพิ่มสไตล์หรือปรับแต่งเนื้อหาให้เหมาะสำหรับคอมพิวเตอร์ */
+            /* ตัวอย่าง:
+            h1 {
+                font-size: 36px;
+            }
+            .capture-button,
+            .predict-button {
+                padding: 18px 24px;
+                font-size: 18px;
+            }
+            */
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <h1>ระบบช่วยวิเคราะห์ชนิดพันธุ์ข้าวปลูก</h1>
+    <form action="/" method="post" enctype="multipart/form-data" id="uploadForm">
+        <input type="file" id="imageInput" name="image" accept="image/*">
+        <label class="capture-button" for="imageInput">อัพโหลดรูปภาพ</label>
+        <button type="button" class="capture-button" id="captureButton">ถ่ายภาพ</button>
+        <input type="submit" class="predict-button" value="วิเคราะห์">
+    </form>
+
+    <div class="image-preview" id="imagePreview">
+        {% if image_path %}
+        <h2>อัพโหลดรูปภาพ:</h2>
+        <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image">
+        {% endif %}
+    </div>
+    <div class="result">
+        {% if predictions %}
+        <h2>ผลการวิเคราะห์:</h2>
+        <p>{{ predictions[0] }}</p> <!-- เพิ่มบรรทัดนี้เพื่อแสดงค่าเดียวเท่านั้น -->
+        <div id="imagePreviewResult">
+            <h2>อัพโหลดรูปภาพ:</h2>
+            <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded Image">
+        </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        const imageInput = document.getElementById("imageInput");
+        const imagePreview = document.getElementById("imagePreview");
+        const captureButton = document.getElementById("captureButton");
+
+        // Show the selected image when choosing a file
+        imageInput.addEventListener("change", function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.addEventListener("load", function() {
+                    const image = new Image();
+                    image.src = reader.result;
+                    imagePreview.innerHTML = "";
+                    imagePreview.appendChild(image);
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Capture image from camera
+        captureButton.addEventListener("click", function() {
+            const constraints = { video: true };
+
+            // Request access to the camera
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(function(stream) {
+                    const video = document.createElement("video");
+                    video.srcObject = stream;
+                    video.play();
+
+                    const canvas = document.createElement("canvas");
+                    const context = canvas.getContext("2d");
+                    canvas.width = 640;
+                    canvas.height = 480;
+
+                    setTimeout(function() {
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const imageDataURL = canvas.toDataURL("image/png");
+                        const image = new Image();
+                        image.src = imageDataURL;
+                        imagePreview.innerHTML = "";
+                        imagePreview.appendChild(image);
+                        stream.getTracks().forEach(track => track.stop());
+                        // Add the captured image to the form data for submission
+                        const blob = dataURItoBlob(imageDataURL);
+                        const capturedImage = new File([blob], "captured_image.png");
+                        const formData = new FormData(document.getElementById("uploadForm"));
+                        formData.set("image", capturedImage);
+                        // Submit the form with the captured image
+                        fetch("/", {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            const tempElement = document.createElement("div");
+                            tempElement.innerHTML = html;
+                            const predictionsDiv = tempElement.querySelector(".result");
+                            const resultDiv = document.querySelector(".result");
+                            resultDiv.innerHTML = predictionsDiv.innerHTML;
+                            // Update image path
+                            const capturedImageSrc = tempElement.querySelector("#imagePreview img").getAttribute("src");
+                            const imagePreviewDiv = document.getElementById("imagePreview");
+                            imagePreviewDiv.innerHTML = '<h2>Uploaded Image:</h2><img src="' + capturedImageSrc + '" alt="Uploaded Image">';
+                        })
+                        .catch(error => console.error("Error submitting form:", error));
+                    }, 1000);
+                })
+                .catch(function(error) {
+                    console.error("Error accessing camera:", error);
+                });
+        });
+
+        function dataURItoBlob(dataURI) {
+            const byteString = atob(dataURI.split(",")[1]);
+            const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], { type: mimeString });
+        }
+    </script>
+    <style>
+        .welcome-link a {
+            color: #d3af91; /* เปลี่ยนสีข้อความลิงค์เป็นสีแดง */
+            text-decoration: none; /* ไม่แสดงเส้นใต้ลิงค์ */
+        }
+    </style>
+    <div class="welcome-link">
+        <a href="{{ url_for('welcome_page') }}">ย้อนกลับ</a>
+    </div>
+</body>
+</html>

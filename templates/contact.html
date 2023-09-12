@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ข้อมูลผู้พัฒนา</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+            justify-content: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+            min-height: 100vh; /* ความสูงขั้นต่ำของหน้าเว็บ */
+        }
+
+        h1 {
+            text-align: center;
+            color: #5f390a;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .contact-info {
+            margin-top: 30px;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+        }
+
+        .contact-form {
+            margin-top: 30px;
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .contact-form input[type="text"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .contact-form button {
+            background-color: #6d88ba;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .contact-form button:hover {
+            background-color: #536d92;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <h1>ข้อมูลผู้พัฒนา</h1>
+    <p>นางสาวสุจิวรรณ แย้มเสาธง</p>
+    <p>วิทยาการคอมพิวเตอร์ คณะวิทยาศาตร์ มหาวิทยาลัยนเรศวร</p>
+    <div class="contact-info">
+        <p>Email: Sujiwany63@nu.ac.th</p>
+        <p>Phone: 095-527-9463</p>
+        <p>Address: 27/3 Moo4, Philom, Bangkrathum, Phitsanulok,Thailand</p>
+    </div>
+    <style>
+        .welcome-link a {
+            color: #d3af91; /* เปลี่ยนสีข้อความลิงค์เป็นสีแดง */
+            text-decoration: none; /* ไม่แสดงเส้นใต้ลิงค์ */
+        }
+    </style>
+    <div class="welcome-link">
+        <a href="{{ url_for('welcome_page') }}">ย้อนกลับ</a>
+    </div>
+</body>
+</html>
