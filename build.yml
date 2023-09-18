@@ -1,0 +1,29 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - gh-pages  # หรือสามารถเปลี่ยนเป็นชื่อ branch ที่คุณใช้
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x  # เลือกเวอร์ชัน Python ที่คุณต้องการใช้
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # ปรับให้ตรงกับชื่อไฟล์ requirements ของคุณ
+
+      - name: Build and deploy
+        run: |
+          # ใส่คำสั่งที่คุณใช้ในการสร้างและรัน Flask และตัวอย่างเว็บแอพของคุณ
+          # เช่น python app.py
